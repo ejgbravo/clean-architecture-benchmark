@@ -1,0 +1,187 @@
+[submodule "proyectos/odoo"]
+path = proyectos/odoo
+url = https://github.com/odoo/odoo
+
+[submodule "proyectos/erpnext"]
+path = proyectos/erpnext
+url = https://github.com/frappe/erpnext
+
+[submodule "proyectos/ofbiz-framework"]
+path = proyectos/ofbiz-framework
+url = https://github.com/apache/ofbiz-framework
+
+[submodule "proyectos/dolibarr"]
+path = proyectos/dolibarr
+url = https://github.com/Dolibarr/dolibarr
+
+[submodule "proyectos/idempiere"]
+path = proyectos/idempiere
+url = https://github.com/idempiere/idempiere
+
+[submodule "proyectos/adempiere"]
+path = proyectos/adempiere
+url = https://github.com/adempiere/adempiere
+
+[submodule "proyectos/metasfresh"]
+path = proyectos/metasfresh
+url = https://github.com/metasfresh/metasfresh
+
+[submodule "proyectos/tryton"]
+path = proyectos/tryton
+url = https://github.com/tryton/tryton
+
+[submodule "proyectos/axelor-open-suite"]
+path = proyectos/axelor-open-suite
+url = https://github.com/axelor/axelor-open-suite
+
+[submodule "proyectos/webERP"]
+path = proyectos/webERP
+url = https://github.com/webERP-team/webERP
+
+[submodule "proyectos/LedgerSMB"]
+path = proyectos/LedgerSMB
+url = https://github.com/ledgersmb/LedgerSMB
+
+[submodule "proyectos/akaunting"]
+path = proyectos/akaunting
+url = https://github.com/akaunting/akaunting
+
+[submodule "proyectos/espocrm"]
+path = proyectos/espocrm
+url = https://github.com/espocrm/espocrm
+
+[submodule "proyectos/monica"]
+path = proyectos/monica
+url = https://github.com/monicahq/monica
+
+[submodule "proyectos/InvenTree"]
+path = proyectos/InvenTree
+url = https://github.com/inventree/InvenTree
+
+[submodule "proyectos/crater"]
+path = proyectos/crater
+url = https://github.com/crater-invoice/crater
+
+[submodule "proyectos/hilla"]
+path = proyectos/hilla
+url = https://github.com/vaadin/hilla
+
+[submodule "proyectos/trudesk"]
+path = proyectos/trudesk
+url = https://github.com/polonel/trudesk
+
+[submodule "proyectos/corteza"]
+path = proyectos/corteza
+url = https://github.com/cortezaproject/corteza
+
+[submodule "proyectos/baserow"]
+path = proyectos/baserow
+url = https://github.com/baserow/baserow
+
+[submodule "proyectos/appsmith"]
+path = proyectos/appsmith
+url = https://github.com/appsmithorg/appsmith
+
+[submodule "proyectos/ToolJet"]
+path = proyectos/ToolJet
+url = https://github.com/ToolJet/ToolJet
+
+[submodule "proyectos/health"]
+path = proyectos/health
+url = https://github.com/frappe/health
+
+[submodule "proyectos/twenty"]
+path = proyectos/twenty
+url = https://github.com/twentyhq/twenty
+
+[submodule "proyectos/cal.com"]
+path = proyectos/cal.com
+url = https://github.com/calcom/cal.com
+
+[submodule "proyectos/OCSInventory-ocsreports"]
+path = proyectos/OCSInventory-ocsreports
+url = https://github.com/OCSInventory-ng/OCSInventory-ocsreports
+
+[submodule "proyectos/glpi"]
+path = proyectos/glpi
+url = https://github.com/glpi-project/glpi
+
+[submodule "proyectos/fusionpbx-apps"]
+path = proyectos/fusionpbx-apps
+url = https://github.com/fusionpbx/fusionpbx-apps
+
+[submodule "proyectos/vtigercrm"]
+path = proyectos/vtigercrm
+url = https://github.com/vtiger-crm/vtigercrm
+
+[submodule "proyectos/SuiteCRM"]
+path = proyectos/SuiteCRM
+url = https://github.com/salesagility/SuiteCRM
+
+[submodule "proyectos/Zurmo"]
+path = proyectos/Zurmo
+url = https://github.com/zurmo/Zurmo
+
+[submodule "proyectos/crm"]
+path = proyectos/crm
+url = https://github.com/oroinc/crm
+
+[submodule "proyectos/mautic"]
+path = proyectos/mautic
+url = https://github.com/mautic/mautic
+
+[submodule "proyectos/centreon"]
+path = proyectos/centreon
+url = https://github.com/centreon/centreon
+
+[submodule "proyectos/iTop"]
+path = proyectos/iTop
+url = https://github.com/Combodo/iTop
+
+[submodule "proyectos/openproject"]
+path = proyectos/openproject
+url = https://github.com/opf/openproject
+
+[submodule "proyectos/taiga-back"]
+path = proyectos/taiga-back
+url = https://github.com/taigaio/taiga-back
+
+[submodule "proyectos/redmine"]
+path = proyectos/redmine
+url = https://github.com/redmine/redmine
+
+[submodule "proyectos/wekan"]
+path = proyectos/wekan
+url = https://github.com/wekan/wekan
+
+[submodule "proyectos/focalboard"]
+path = proyectos/focalboard
+url = https://github.com/mattermost/focalboard
+
+[submodule "proyectos/plane"]
+path = proyectos/plane
+url = https://github.com/makeplane/plane
+
+[submodule "proyectos/AppFlowy"]
+path = proyectos/AppFlowy
+url = https://github.com/AppFlowy-IO/AppFlowy
+
+[submodule "proyectos/server"]
+path = proyectos/server
+url = https://github.com/nextcloud/server
+
+[submodule "proyectos/BookStack"]
+path = proyectos/BookStack
+url = https://github.com/BookStackApp/BookStack
+
+[submodule "proyectos/hedgedoc"]
+path = proyectos/hedgedoc
+url = https://github.com/hedgedoc/hedgedoc
+
+[submodule "proyectos/kanboard"]
+path = proyectos/kanboard
+url = https://github.com/kanboard/kanboard
+
+[submodule "proyectos/board"]
+path = proyectos/board
+url = https://github.com/RestyaPlatform/board
