@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "description": "Evaluation criteria and scoring rubric for Clean Architecture compliance assessment",
+    "based_on": "Clean Architecture by Robert C. Martin (2017)",
+    "isbn": "978-0134494166"
+  },
+  "principles": {
+    "dependency_rule": "Source code dependencies can only point inward. Nothing in an inner circle can know anything at all about something in an outer circle.",
+    "layers": [
+      {
+        "name": "Entities",
+        "order": 1,
+        "description": "Enterprise-wide business rules. These are the most stable and reusable objects. They encapsulate the critical business data and logic.",
+        "indicators": [
+          "Plain objects (POJOs/POPOs/POCOs) with no framework dependencies",
+          "Contain enterprise business rules that would exist even without the application",
+          "Can be used across multiple applications"
+        ]
+      },
+      {
+        "name": "Use Cases",
+        "order": 2,
+        "description": "Application-specific business rules. These orchestrate the flow of data to and from entities.",
+        "indicators": [
+          "Named after business operations (e.g., PlaceOrder, RegisterCustomer)",
+          "Depend only on entities and abstract interfaces",
+          "Framework-independent; no HTTP, database, or UI knowledge"
+        ]
+      },
+      {
+        "name": "Interface Adapters",
+        "order": 3,
+        "description": "Convert data from the format most convenient for use cases to the format most convenient for external agencies (DB, Web, etc.).",
+        "indicators": [
+          "Controllers, Presenters, Gateway implementations",
+          "Translate between domain objects and DTOs/ViewModels",
+          "May know about the web framework or ORM, but only at the boundary"
+        ]
+      },
+      {
+        "name": "Frameworks and Drivers",
+        "order": 4,
+        "description": "Outermost layer: databases, web frameworks, UI, external services. Details belong here.",
+        "indicators": [
+          "Database configuration and migrations",
+          "HTTP routing and middleware",
+          "Third-party service SDKs"
+        ]
+      }
+    ]
+  },
+  "criteria": [
+    {
+      "id": "layer_separation",
+      "name": "Layer Separation",
+      "description": "The degree to which the four Clean Architecture layers (Entities, Use Cases, Interface Adapters, Frameworks) are clearly separated in the codebase structure.",
+      "weight": 1.0,
+      "scores": {
+        "0": "No recognizable layer separation. Business logic, persistence, and presentation are mixed throughout.",
+        "1": "Basic separation present (e.g., MVC) but does not map to Clean Architecture layers. Major concerns are still mixed.",
+        "2": "Three or more distinct layers are identifiable (e.g., Entity, Service, Repository, Controller). Some cross-layer leakage.",
+        "3": "All four Clean Architecture layers are clearly separated, named, and consistently applied throughout the codebase."
+      }
+    },
+    {
+      "id": "dependency_rule",
+      "name": "Dependency Rule",
+      "description": "Whether source code dependencies always point inward (inner layers do not import from outer layers).",
+      "weight": 1.0,
+      "scores": {
+        "0": "Dependencies point in all directions; inner layers import directly from outer layers (e.g., domain imports from ORM).",
+        "1": "Some effort to control dependencies, but inner layers still frequently import outer-layer specifics.",
+        "2": "Most dependencies point inward. A few violations exist (e.g., framework annotations on entities).",
+        "3": "All dependencies strictly point inward. Outer layers depend on interfaces defined by inner layers (Dependency Inversion Principle applied)."
+      }
+    },
+    {
+      "id": "entity_independence",
+      "name": "Entity Independence",
+      "description": "Whether domain entities (business objects) are free from framework, ORM, and infrastructure dependencies.",
+      "weight": 1.0,
+      "scores": {
+        "0": "Entities extend or import from ORM/framework base classes. They cannot be instantiated without infrastructure.",
+        "1": "Entities have some framework annotations or utilities but could theoretically function without a running framework with effort.",
+        "2": "Entities are mostly plain objects. Minor framework dependencies (e.g., annotations for serialization) do not affect behaviour.",
+        "3": "Entities are pure domain objects with zero framework dependencies. They represent business concepts independently."
+      }
+    },
+    {
+      "id": "use_case_layer",
+      "name": "Use Case / Application Service Layer",
+      "description": "Whether there is a clearly identifiable application service or use case layer that orchestrates domain logic independently of infrastructure.",
+      "weight": 1.0,
+      "scores": {
+        "0": "No use case or application service layer exists. All workflow logic is in controllers, models, or scripts.",
+        "1": "Some service classes exist but they mix application logic with framework or infrastructure concerns.",
+        "2": "Service/use case classes are present and reasonably separated, but some infrastructure coupling remains (e.g., direct ORM calls in services).",
+        "3": "A clear use case layer exists. Use cases are named after domain operations, are framework-free, and depend only on domain entities and repository interfaces."
+      }
+    },
+    {
+      "id": "testability",
+      "name": "Testability",
+      "description": "Whether the core domain and application logic can be unit-tested in isolation, without requiring a database, web server, or other infrastructure.",
+      "weight": 1.0,
+      "scores": {
+        "0": "Unit testing domain logic is effectively impossible without a live database or running framework.",
+        "1": "Domain logic can be tested with significant mocking effort, but the architecture does not facilitate it.",
+        "2": "Domain and service logic can be unit-tested with moderate mocking. Repository interfaces or DI make isolation feasible.",
+        "3": "Domain logic can be easily tested in pure unit tests. DI, interface abstractions, and clean boundaries make mocking straightforward."
+      }
+    },
+    {
+      "id": "abstraction_usage",
+      "name": "Abstraction and Interface Usage",
+      "description": "Whether interfaces (ports) are defined for external dependencies (persistence, messaging, external services) allowing the Dependency Inversion Principle to be applied.",
+      "weight": 1.0,
+      "scores": {
+        "0": "No interfaces used for external dependencies. All code depends on concrete implementations.",
+        "1": "Some interfaces exist but are inconsistently applied. Most external dependencies are still concrete.",
+        "2": "Repository or service interfaces are used consistently for major external dependencies. Some concrete classes remain.",
+        "3": "All external dependencies are accessed through interfaces (ports). Concrete adapters are in the outermost layer. Full Dependency Inversion."
+      }
+    }
+  ],
+  "total_score_ranges": {
+    "none": {
+      "min": 0,
+      "max": 5,
+      "label": "Does not follow Clean Architecture",
+      "description": "The codebase shows no meaningful attempt to apply Clean Architecture principles. Layers are collapsed, dependencies are uncontrolled, and testing domain logic requires infrastructure."
+    },
+    "partial": {
+      "min": 6,
+      "max": 11,
+      "label": "Partially follows Clean Architecture",
+      "description": "Some Clean Architecture elements are present (e.g., service layers, repository patterns), but the application does not consistently enforce the dependency rule or achieve entity independence."
+    },
+    "mostly": {
+      "min": 12,
+      "max": 15,
+      "label": "Mostly follows Clean Architecture",
+      "description": "Most Clean Architecture principles are applied. Clear layering, mostly inward-pointing dependencies, and good testability are present, but minor violations or framework coupling exist."
+    },
+    "full": {
+      "min": 16,
+      "max": 18,
+      "label": "Fully follows Clean Architecture",
+      "description": "The codebase demonstrates consistent application of all Clean Architecture principles: strict layer separation, the dependency rule, entity independence, clear use cases, excellent testability, and full use of abstractions."
+    }
+  }
+}

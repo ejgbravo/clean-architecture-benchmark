@@ -1,0 +1,321 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "description": "Curated dataset of open source ERP/CRM projects for Clean Architecture evaluation",
+    "created": "2026-03-11",
+    "schema_version": "1.0"
+  },
+  "projects": [
+    {
+      "id": "odoo",
+      "name": "Odoo",
+      "type": ["ERP", "CRM"],
+      "language": "Python",
+      "framework": "Odoo ORM",
+      "repository": "https://github.com/odoo/odoo",
+      "license": "LGPL-3.0",
+      "stars_approx": 35000,
+      "last_analyzed_commit": "main",
+      "description": "Comprehensive open-source ERP and CRM suite. Monolithic framework with a proprietary ORM, web framework, and business logic tightly integrated into modules.",
+      "architecture_style": "Monolithic MVC",
+      "key_directories": {
+        "models": "addons/*/models/",
+        "controllers": "addons/*/controllers/",
+        "views": "addons/*/views/",
+        "tests": "addons/*/tests/"
+      },
+      "notable_characteristics": [
+        "Custom ORM where business logic is embedded in model methods",
+        "No clear separation between domain logic and persistence",
+        "Controllers tightly coupled to Odoo's HTTP framework",
+        "Module system provides some separation at macro level",
+        "Heavy use of inheritance and monkey-patching"
+      ],
+      "sample_files": [
+        "addons/sale/models/sale_order.py",
+        "addons/sale/controllers/portal.py",
+        "addons/account/models/account_move.py"
+      ]
+    },
+    {
+      "id": "erpnext",
+      "name": "ERPNext",
+      "type": ["ERP"],
+      "language": "Python",
+      "framework": "Frappe Framework",
+      "repository": "https://github.com/frappe/erpnext",
+      "license": "GPL-3.0",
+      "stars_approx": 18000,
+      "last_analyzed_commit": "develop",
+      "description": "Cloud ERP system built on top of the Frappe framework. Business logic is organized in DocType-based modules tightly coupled to the Frappe ORM and metadata system.",
+      "architecture_style": "DocType-driven MVC",
+      "key_directories": {
+        "models": "erpnext/*/doctype/*/",
+        "controllers": "erpnext/controllers/",
+        "tests": "erpnext/tests/"
+      },
+      "notable_characteristics": [
+        "DocType system tightly couples metadata, validation and persistence",
+        "Business logic spread across controller.py and model hooks",
+        "No explicit use case or application service layer",
+        "Frappe framework deeply embedded in all layers",
+        "Some domain logic in utility modules but not consistently separated"
+      ],
+      "sample_files": [
+        "erpnext/selling/doctype/sales_order/sales_order.py",
+        "erpnext/controllers/accounts_controller.py",
+        "erpnext/stock/doctype/stock_entry/stock_entry.py"
+      ]
+    },
+    {
+      "id": "tryton",
+      "name": "Tryton",
+      "type": ["ERP"],
+      "language": "Python",
+      "framework": "Tryton Server Framework",
+      "repository": "https://github.com/tryton/tryton",
+      "license": "GPL-3.0",
+      "stars_approx": 1500,
+      "last_analyzed_commit": "main",
+      "description": "Modular three-tier high-level general purpose application platform, used as ERP. Features clear module boundaries and a protocol-based client-server separation.",
+      "architecture_style": "Three-tier Modular",
+      "key_directories": {
+        "models": "modules/*/",
+        "server": "trytond/",
+        "tests": "modules/*/tests/"
+      },
+      "notable_characteristics": [
+        "Clear separation between server core (trytond) and modules",
+        "Protocol-based communication between client and server layers",
+        "Model layer uses descriptors but still tied to the Tryton ORM",
+        "Wizard pattern provides a basic application service layer",
+        "Consistent use of IR (Information Repository) for metadata"
+      ],
+      "sample_files": [
+        "modules/sale/sale.py",
+        "modules/account/account.py",
+        "trytond/model/modelsql.py"
+      ]
+    },
+    {
+      "id": "suitecrm",
+      "name": "SuiteCRM",
+      "type": ["CRM"],
+      "language": "PHP",
+      "framework": "SugarCRM Legacy",
+      "repository": "https://github.com/salesagility/SuiteCRM",
+      "license": "AGPL-3.0",
+      "stars_approx": 4200,
+      "last_analyzed_commit": "develop",
+      "description": "Enterprise-grade open source CRM forked from SugarCRM. Legacy architecture with intertwined database queries, business logic and presentation in many places.",
+      "architecture_style": "Legacy MVC / Active Record",
+      "key_directories": {
+        "models": "modules/",
+        "core": "include/",
+        "views": "modules/*/views/",
+        "tests": "tests/"
+      },
+      "notable_characteristics": [
+        "Active Record pattern: domain objects directly extend SugarBean (database entity)",
+        "SQL queries embedded in business logic and view files",
+        "Limited use of interfaces or abstractions for external dependencies",
+        "Module structure provides macro-level separation",
+        "Some refactoring towards services in recent versions but inconsistent"
+      ],
+      "sample_files": [
+        "modules/Contacts/Contact.php",
+        "modules/Accounts/Account.php",
+        "modules/Cases/Case.php"
+      ]
+    },
+    {
+      "id": "espocrm",
+      "name": "EspoCRM",
+      "type": ["CRM"],
+      "language": "PHP",
+      "framework": "Custom PHP Framework",
+      "repository": "https://github.com/espocrm/espocrm",
+      "license": "AGPL-3.0",
+      "stars_approx": 1600,
+      "last_analyzed_commit": "master",
+      "description": "Modern CRM with a clean PHP architecture. Uses dependency injection, service layers, and repository patterns, showing better separation than older PHP CRMs.",
+      "architecture_style": "Layered with DI Container",
+      "key_directories": {
+        "entities": "application/Espo/Entities/",
+        "services": "application/Espo/Services/",
+        "repositories": "application/Espo/Repositories/",
+        "controllers": "application/Espo/Controllers/",
+        "tests": "tests/"
+      },
+      "notable_characteristics": [
+        "Separate Entity, Repository and Service layers",
+        "Dependency injection container used throughout the application",
+        "Entities are relatively thin data objects with some domain logic",
+        "Services handle business logic but have some infrastructure coupling",
+        "Repository pattern abstracts data access"
+      ],
+      "sample_files": [
+        "application/Espo/Entities/Contact.php",
+        "application/Espo/Services/Contact.php",
+        "application/Espo/Repositories/ContactRepository.php"
+      ]
+    },
+    {
+      "id": "dolibarr",
+      "name": "Dolibarr",
+      "type": ["ERP", "CRM"],
+      "language": "PHP",
+      "framework": "None (custom)",
+      "repository": "https://github.com/Dolibarr/dolibarr",
+      "license": "GPL-3.0",
+      "stars_approx": 5000,
+      "last_analyzed_commit": "develop",
+      "description": "Web-based ERP and CRM for small and medium businesses. Predominantly procedural PHP with class-based models that include direct database calls, minimal layering.",
+      "architecture_style": "Procedural / Active Record",
+      "key_directories": {
+        "classes": "htdocs/*/class/",
+        "pages": "htdocs/*/",
+        "lib": "htdocs/core/lib/",
+        "tests": "test/"
+      },
+      "notable_characteristics": [
+        "Classes directly execute SQL queries (Active Record with manual SQL)",
+        "Business logic, HTML, and database access mixed in page scripts",
+        "No service layer or use case abstraction",
+        "Global functions in lib/ directories used across all modules",
+        "Very little use of interfaces or dependency injection"
+      ],
+      "sample_files": [
+        "htdocs/societe/class/societe.class.php",
+        "htdocs/facture/class/facture.class.php",
+        "htdocs/commande/class/commande.class.php"
+      ]
+    },
+    {
+      "id": "orocrm",
+      "name": "OroCRM",
+      "type": ["CRM"],
+      "language": "PHP",
+      "framework": "Symfony",
+      "repository": "https://github.com/oroinc/crm",
+      "license": "OSL-3.0",
+      "stars_approx": 760,
+      "last_analyzed_commit": "master",
+      "description": "Enterprise CRM built on Oro Platform and Symfony. Uses Symfony best practices: Doctrine repositories, service layer, event-driven architecture and clear bundle separation.",
+      "architecture_style": "Layered / Hexagonal (Symfony DDD)",
+      "key_directories": {
+        "entities": "src/Oro/Bundle/*/Entity/",
+        "repositories": "src/Oro/Bundle/*/Entity/Repository/",
+        "services": "src/Oro/Bundle/*/Provider/",
+        "controllers": "src/Oro/Bundle/*/Controller/",
+        "tests": "src/Oro/Bundle/*/Tests/"
+      },
+      "notable_characteristics": [
+        "Symfony bundle structure provides clear module boundaries",
+        "Doctrine repositories cleanly separate persistence from domain",
+        "Service layer using Symfony DI with interface-based abstractions",
+        "Event-driven communication between bundles reduces coupling",
+        "Some domain logic still leaks into Symfony controllers"
+      ],
+      "sample_files": [
+        "src/Oro/Bundle/ContactBundle/Entity/Contact.php",
+        "src/Oro/Bundle/ContactBundle/Entity/Repository/ContactRepository.php",
+        "src/Oro/Bundle/SalesBundle/Provider/CustomerVirtualRelationProvider.php"
+      ]
+    },
+    {
+      "id": "metasfresh",
+      "name": "metasfresh",
+      "type": ["ERP"],
+      "language": "Java",
+      "framework": "Spring Boot / OSGi",
+      "repository": "https://github.com/metasfresh/metasfresh",
+      "license": "GPL-2.0",
+      "stars_approx": 1200,
+      "last_analyzed_commit": "master",
+      "description": "Cloud-ready ERP built with Java and Spring Boot. Organized into bounded contexts with clear separation of API, model, and repository layers. Uses DDD tactical patterns.",
+      "architecture_style": "DDD / Hexagonal",
+      "key_directories": {
+        "domain": "backend/de.metas.*/src/main/java/**/model/",
+        "services": "backend/de.metas.*/src/main/java/**/service/",
+        "repositories": "backend/de.metas.*/src/main/java/**/repository/",
+        "api": "backend/de.metas.*/src/main/java/**/api/",
+        "tests": "backend/de.metas.*/src/test/"
+      },
+      "notable_characteristics": [
+        "Bounded contexts map to Maven modules with explicit boundaries",
+        "Interfaces (Java API) define contracts between layers",
+        "Repository pattern with Spring Data abstracts persistence",
+        "Domain services separate from infrastructure services",
+        "Some legacy ADempiere code still uses active record pattern"
+      ],
+      "sample_files": [
+        "backend/de.metas.business/src/main/java/de/metas/order/IOrderDAO.java",
+        "backend/de.metas.business/src/main/java/de/metas/order/OrderRepository.java",
+        "backend/de.metas.business/src/main/java/de/metas/order/impl/OrderBL.java"
+      ]
+    },
+    {
+      "id": "idempiere",
+      "name": "iDempiere",
+      "type": ["ERP"],
+      "language": "Java",
+      "framework": "OSGi (Equinox) / ADempiere",
+      "repository": "https://github.com/idempiere/idempiere",
+      "license": "GPL-2.0",
+      "stars_approx": 380,
+      "last_analyzed_commit": "master",
+      "description": "OSGi-based ERP using the ADempiere data model. Plugin architecture provides strong module isolation, but domain objects extend from a generated base layer tied to the database schema.",
+      "architecture_style": "Plugin-based / Active Record",
+      "key_directories": {
+        "models": "org.adempiere.base/src/org/compiere/model/",
+        "processes": "org.adempiere.base/src/org/compiere/process/",
+        "plugins": "*/src/*/",
+        "tests": "org.adempiere.test/"
+      },
+      "notable_characteristics": [
+        "Generated model classes (MTable, MOrder, etc.) extend PO (Persistent Object)",
+        "OSGi plugins allow strong module boundary enforcement",
+        "Process classes provide a form of use-case separation",
+        "Domain models directly access the database via the PO base class",
+        "Interface-based plugin API for cross-plugin communication"
+      ],
+      "sample_files": [
+        "org.adempiere.base/src/org/compiere/model/MOrder.java",
+        "org.adempiere.base/src/org/compiere/model/MInvoice.java",
+        "org.adempiere.base/src/org/compiere/process/DocAction.java"
+      ]
+    },
+    {
+      "id": "vtiger",
+      "name": "Vtiger CRM",
+      "type": ["CRM"],
+      "language": "PHP",
+      "framework": "Custom PHP",
+      "repository": "https://github.com/vtiger-crm/vtiger",
+      "license": "VPL-1.1",
+      "stars_approx": 390,
+      "last_analyzed_commit": "master",
+      "description": "Open source CRM evolved from SugarCRM. Retains legacy Active Record patterns but adds a handler and event system. Business logic, persistence, and presentation remain somewhat mixed.",
+      "architecture_style": "Legacy MVC / Active Record",
+      "key_directories": {
+        "models": "modules/",
+        "vtlib": "vtlib/Vtiger/",
+        "handlers": "modules/*/handlers/",
+        "tests": "tests/"
+      },
+      "notable_characteristics": [
+        "Modules extend CRMEntity (Active Record base class with database access)",
+        "Handler system adds some event-driven separation",
+        "Vtlib provides utility abstractions but coupling remains high",
+        "Limited use of dependency injection or inversion of control",
+        "Some newer code shows cleaner patterns but inconsistently applied"
+      ],
+      "sample_files": [
+        "modules/Contacts/Contacts.php",
+        "modules/Accounts/Accounts.php",
+        "vtlib/Vtiger/CRMEntity.php"
+      ]
+    }
+  ]
+}

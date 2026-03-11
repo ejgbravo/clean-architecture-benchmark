@@ -1,0 +1,297 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "description": "Ground truth Clean Architecture compliance annotations for the ERP/CRM dataset",
+    "scoring_guide": {
+      "per_criterion": "0-3 scale (0=none, 1=poor, 2=fair, 3=good)",
+      "total": "Sum of all criteria (max 18)",
+      "compliance_levels": {
+        "none": "0-5",
+        "partial": "6-11",
+        "mostly": "12-15",
+        "full": "16-18"
+      }
+    },
+    "criteria": [
+      "layer_separation",
+      "dependency_rule",
+      "entity_independence",
+      "use_case_layer",
+      "testability",
+      "abstraction_usage"
+    ]
+  },
+  "evaluations": [
+    {
+      "project_id": "odoo",
+      "annotator": "expert_review",
+      "scores": {
+        "layer_separation": 1,
+        "dependency_rule": 1,
+        "entity_independence": 0,
+        "use_case_layer": 1,
+        "testability": 1,
+        "abstraction_usage": 1
+      },
+      "total_score": 5,
+      "compliance_level": "none",
+      "justifications": {
+        "layer_separation": "Modules group related functionality but do not separate domain, application, and infrastructure layers. Models contain both business logic and ORM calls.",
+        "dependency_rule": "Domain models import and use the Odoo ORM directly; inner layers know about outer (infrastructure) concerns.",
+        "entity_independence": "Model classes inherit from models.Model, making them completely dependent on the Odoo ORM. There is no way to instantiate a domain entity without the framework.",
+        "use_case_layer": "Some business operations are placed in service-like methods or wizard classes, but most logic lives in model methods that are also persistence objects.",
+        "testability": "Tests require a running Odoo environment and PostgreSQL; unit-testing domain logic in isolation is not possible without significant mocking.",
+        "abstraction_usage": "External services (email, payment) are accessed through Odoo abstractions, but core persistence has no interface, preventing swapping the ORM."
+      },
+      "overall_assessment": "Odoo is a highly productive framework-centric ERP, but it makes no attempt to follow Clean Architecture. All layers are collapsed into framework-dependent modules. Suitable as a negative reference example.",
+      "references": [
+        "https://github.com/odoo/odoo/blob/main/addons/sale/models/sale_order.py",
+        "https://github.com/odoo/odoo/blob/main/addons/sale/tests/test_sale_order.py"
+      ]
+    },
+    {
+      "project_id": "erpnext",
+      "annotator": "expert_review",
+      "scores": {
+        "layer_separation": 1,
+        "dependency_rule": 1,
+        "entity_independence": 0,
+        "use_case_layer": 1,
+        "testability": 1,
+        "abstraction_usage": 1
+      },
+      "total_score": 5,
+      "compliance_level": "none",
+      "justifications": {
+        "layer_separation": "DocType classes serve simultaneously as schema definitions, form renderers, validators, and persistence objects. Layers are fully collapsed.",
+        "dependency_rule": "Every document class imports from frappe (the infrastructure framework). Domain logic cannot be used without the full Frappe stack.",
+        "entity_independence": "Inheriting from frappe.Document hard-couples every entity to the Frappe ORM, metadata engine, and HTTP layer.",
+        "use_case_layer": "Controller functions provide some separation of workflow logic, but they still rely on frappe.db and frappe.get_doc, mixing application and infrastructure concerns.",
+        "testability": "Tests must set up a full Frappe site with a MariaDB/PostgreSQL database; domain-level unit testing is impractical.",
+        "abstraction_usage": "Frappe provides hooks and override mechanisms but the core domain objects have no interface layer."
+      },
+      "overall_assessment": "ERPNext inherits Frappe's opinionated architecture that prioritises developer productivity over structural separation. It is another strong negative reference example for Clean Architecture.",
+      "references": [
+        "https://github.com/frappe/erpnext/blob/develop/erpnext/selling/doctype/sales_order/sales_order.py",
+        "https://github.com/frappe/erpnext/blob/develop/erpnext/controllers/accounts_controller.py"
+      ]
+    },
+    {
+      "project_id": "tryton",
+      "annotator": "expert_review",
+      "scores": {
+        "layer_separation": 2,
+        "dependency_rule": 1,
+        "entity_independence": 1,
+        "use_case_layer": 2,
+        "testability": 2,
+        "abstraction_usage": 1
+      },
+      "total_score": 9,
+      "compliance_level": "partial",
+      "justifications": {
+        "layer_separation": "Clear server/module/client boundary. Within the server, models and business logic are separated from the RPC protocol, but persistence is still in the model layer.",
+        "dependency_rule": "Model classes import from trytond core for ORM functionality; inner layers depend on the framework's ORM layer.",
+        "entity_independence": "Models use Tryton descriptors (fields.Char, fields.Many2One) making them dependent on the ORM, but the structure is cleaner than Odoo/ERPNext.",
+        "use_case_layer": "Wizards and workflow transitions provide an application-layer abstraction above simple CRUD operations.",
+        "testability": "Tests can be run against an in-memory SQLite database; domain logic is more testable than Odoo/ERPNext, though full isolation is not achieved.",
+        "abstraction_usage": "The IR layer and module system provide some abstraction, but there are no explicit port/adapter interfaces for external systems."
+      },
+      "overall_assessment": "Tryton shows better modular design and a more structured layering than Odoo or ERPNext. It partially follows Clean Architecture in its server/module separation and wizard-based application layer, but inner domain objects still depend on the ORM.",
+      "references": [
+        "https://github.com/tryton/tryton/blob/main/modules/sale/sale.py",
+        "https://github.com/tryton/trytond/blob/main/trytond/model/modelsql.py"
+      ]
+    },
+    {
+      "project_id": "suitecrm",
+      "annotator": "expert_review",
+      "scores": {
+        "layer_separation": 1,
+        "dependency_rule": 1,
+        "entity_independence": 0,
+        "use_case_layer": 0,
+        "testability": 1,
+        "abstraction_usage": 0
+      },
+      "total_score": 3,
+      "compliance_level": "none",
+      "justifications": {
+        "layer_separation": "Module directories group related files, but each module file mixes database calls, business logic, and sometimes HTML output.",
+        "dependency_rule": "SugarBean base class (Active Record) blends persistence and domain logic; all modules depend directly on the database layer.",
+        "entity_independence": "All domain objects extend SugarBean which includes direct PDO/SQL access. Entities cannot exist independently of the database.",
+        "use_case_layer": "There is no identifiable application service or use case layer; workflow logic is embedded directly in module classes.",
+        "testability": "A test framework exists, but most tests require a database connection because domain objects are Active Records.",
+        "abstraction_usage": "No interfaces or abstractions for persistence, email, or other external services; everything is hardcoded to concrete implementations."
+      },
+      "overall_assessment": "SuiteCRM represents a classic legacy PHP application with virtually no architectural separation. It is an extreme negative example for Clean Architecture evaluation.",
+      "references": [
+        "https://github.com/salesagility/SuiteCRM/blob/develop/modules/Contacts/Contact.php",
+        "https://github.com/salesagility/SuiteCRM/blob/develop/include/SugarObjects/SugarBean.php"
+      ]
+    },
+    {
+      "project_id": "espocrm",
+      "annotator": "expert_review",
+      "scores": {
+        "layer_separation": 2,
+        "dependency_rule": 2,
+        "entity_independence": 1,
+        "use_case_layer": 2,
+        "testability": 2,
+        "abstraction_usage": 2
+      },
+      "total_score": 11,
+      "compliance_level": "partial",
+      "justifications": {
+        "layer_separation": "Distinct Entity, Repository, Service, and Controller namespaces exist and are consistently applied across the codebase.",
+        "dependency_rule": "Services depend on Repository interfaces, not on concrete Doctrine classes; controllers depend on services, not on repositories. The inward dependency direction is mostly respected.",
+        "entity_independence": "Entity classes hold state and some domain logic, but they still have some awareness of the persistence layer (e.g., attribute handling tied to the ORM).",
+        "use_case_layer": "Service classes act as an application layer, encapsulating business workflows and coordinating between entities and repositories.",
+        "testability": "DI container and repository interfaces enable mocking; unit tests for services are feasible without a real database.",
+        "abstraction_usage": "Repository interfaces abstract the persistence layer; service interfaces allow dependency injection. External integrations use adapter classes."
+      },
+      "overall_assessment": "EspoCRM demonstrates noticeably better architectural discipline than other PHP CRMs in this dataset. Its consistent use of DI, repository patterns, and service layers partially aligns with Clean Architecture, making it a useful intermediate example.",
+      "references": [
+        "https://github.com/espocrm/espocrm/tree/master/application/Espo/Entities",
+        "https://github.com/espocrm/espocrm/tree/master/application/Espo/Repositories",
+        "https://github.com/espocrm/espocrm/tree/master/application/Espo/Services"
+      ]
+    },
+    {
+      "project_id": "dolibarr",
+      "annotator": "expert_review",
+      "scores": {
+        "layer_separation": 0,
+        "dependency_rule": 0,
+        "entity_independence": 0,
+        "use_case_layer": 0,
+        "testability": 1,
+        "abstraction_usage": 0
+      },
+      "total_score": 1,
+      "compliance_level": "none",
+      "justifications": {
+        "layer_separation": "PHP page scripts mix HTML generation, business logic, SQL queries, and session handling in a single file. No recognisable architectural layers.",
+        "dependency_rule": "Dependencies point in all directions; class files include global functions, SQL calls, and HTML output indiscriminately.",
+        "entity_independence": "Domain classes (e.g., Societe, Facture) contain raw SQL queries and direct database access, making them completely dependent on infrastructure.",
+        "use_case_layer": "No application service or use case layer is present. Actions are implemented as procedural page scripts.",
+        "testability": "A PHPUnit test suite exists but coverage is low; testing domain logic requires database connections because of the Active Record pattern.",
+        "abstraction_usage": "No interfaces or abstractions for any external dependency. The database handle ($db) is passed directly to every domain class constructor."
+      },
+      "overall_assessment": "Dolibarr is the clearest example of a non-layered, procedural/Active-Record codebase in this dataset. It serves as a strong baseline 'zero Clean Architecture' reference.",
+      "references": [
+        "https://github.com/Dolibarr/dolibarr/blob/develop/htdocs/societe/class/societe.class.php",
+        "https://github.com/Dolibarr/dolibarr/blob/develop/htdocs/facture/facture.php"
+      ]
+    },
+    {
+      "project_id": "orocrm",
+      "annotator": "expert_review",
+      "scores": {
+        "layer_separation": 3,
+        "dependency_rule": 2,
+        "entity_independence": 2,
+        "use_case_layer": 2,
+        "testability": 3,
+        "abstraction_usage": 2
+      },
+      "total_score": 14,
+      "compliance_level": "mostly",
+      "justifications": {
+        "layer_separation": "Symfony bundle structure enforces clear separation: Entity, Repository, Provider/Manager (service), Controller, and Form layers are distinct and consistently named.",
+        "dependency_rule": "Entities know nothing about Symfony; repositories depend on Doctrine interfaces; services depend on repository interfaces. A few Symfony annotations in entities create minor violations.",
+        "entity_independence": "Doctrine entities are plain PHP objects with annotations/attributes. They are not coupled to Symfony directly, though Doctrine mapping metadata is embedded via annotations.",
+        "use_case_layer": "Manager and Provider classes serve as an application service layer, but they are not explicitly named 'use cases' and occasionally mix orchestration with infrastructure calls.",
+        "testability": "Extensive unit and integration test suites. Services can be tested with mock repositories; Symfony DI container facilitates test environment configuration.",
+        "abstraction_usage": "Repository interfaces, event dispatchers, and service contracts (interfaces) are used throughout. Some concrete Symfony dependencies in manager classes reduce the score."
+      },
+      "overall_assessment": "OroCRM is the closest to Clean Architecture among the PHP projects in this dataset. Its Symfony foundation and DDD-influenced bundle design provide strong layering. It is a good positive reference, though it falls short of full Clean Architecture due to framework coupling in some service layers.",
+      "references": [
+        "https://github.com/oroinc/crm/tree/master/src/Oro/Bundle/ContactBundle",
+        "https://github.com/oroinc/platform/blob/master/src/Oro/Bundle/EntityBundle/ORM/DoctrineHelper.php"
+      ]
+    },
+    {
+      "project_id": "metasfresh",
+      "annotator": "expert_review",
+      "scores": {
+        "layer_separation": 3,
+        "dependency_rule": 2,
+        "entity_independence": 2,
+        "use_case_layer": 3,
+        "testability": 3,
+        "abstraction_usage": 3
+      },
+      "total_score": 16,
+      "compliance_level": "full",
+      "justifications": {
+        "layer_separation": "Maven module boundaries enforce strict layer separation. Separate modules exist for domain model, repository interfaces (DAO API), repository implementations, service interfaces (BL), and service implementations.",
+        "dependency_rule": "API modules (interfaces only) are compiled against by inner layers; implementation modules depend on the API. The dependency graph is largely acyclic and inward-pointing. Some legacy ADempiere code still violates this.",
+        "entity_independence": "Domain value objects (e.g., OrderId, MoneyWithCurrency) are plain Java classes with no framework dependencies. JPA annotations exist in some models but are kept in a separate infrastructure module.",
+        "use_case_layer": "Business logic (BL) interfaces and implementations provide a clear use-case / application service layer. Use cases are named with domain intent (e.g., IOrderBL.closeOrder).",
+        "testability": "Unit tests cover domain and service logic with JUnit 5 and Mockito, without needing a database. Integration tests are separate. High test coverage in business-critical modules.",
+        "abstraction_usage": "All cross-layer communication happens via Java interfaces. Spring DI wires concrete implementations. External systems (e-mail, document storage) accessed through dedicated port interfaces."
+      },
+      "overall_assessment": "metasfresh is the strongest Clean Architecture implementation in this dataset. Its multi-module Maven layout, interface-first design, and use of domain value objects demonstrate deliberate adherence to Clean Architecture and DDD principles. Minor violations exist in older ADempiere-derived code.",
+      "references": [
+        "https://github.com/metasfresh/metasfresh/tree/master/backend/de.metas.business/src/main/java/de/metas/order",
+        "https://github.com/metasfresh/metasfresh/blob/master/backend/de.metas.business/src/main/java/de/metas/order/IOrderBL.java"
+      ]
+    },
+    {
+      "project_id": "idempiere",
+      "annotator": "expert_review",
+      "scores": {
+        "layer_separation": 2,
+        "dependency_rule": 1,
+        "entity_independence": 1,
+        "use_case_layer": 2,
+        "testability": 1,
+        "abstraction_usage": 2
+      },
+      "total_score": 9,
+      "compliance_level": "partial",
+      "justifications": {
+        "layer_separation": "OSGi plugin system enforces a strong module boundary. Within a plugin, Model (PO-based), Process (use case), and UI layers are conventionally separated.",
+        "dependency_rule": "OSGi service interfaces allow inward dependencies between plugins, but generated model classes (MOrder, MInvoice) extend PO which is tied directly to the database layer.",
+        "entity_independence": "All business model classes extend the PO (Persistent Object) base class, binding every entity to the database access logic. No pure domain entities exist.",
+        "use_case_layer": "Process classes provide a recognisable application service / use case layer, called explicitly and separate from model classes.",
+        "testability": "The Active-Record PO pattern makes domain unit testing difficult. Integration tests run against a live database. Some process classes can be tested in isolation with mocking.",
+        "abstraction_usage": "OSGi services and interface-based plugin communication provide good abstraction at the module level, partially compensating for the lack of abstraction within modules."
+      },
+      "overall_assessment": "iDempiere achieves good separation at the plugin boundary level through OSGi, but falls short internally because the Active Record base class (PO) couples every domain model to the database. A partial Clean Architecture example with strong module isolation.",
+      "references": [
+        "https://github.com/idempiere/idempiere/blob/master/org.adempiere.base/src/org/compiere/model/PO.java",
+        "https://github.com/idempiere/idempiere/blob/master/org.adempiere.base/src/org/compiere/process/DocAction.java"
+      ]
+    },
+    {
+      "project_id": "vtiger",
+      "annotator": "expert_review",
+      "scores": {
+        "layer_separation": 1,
+        "dependency_rule": 0,
+        "entity_independence": 0,
+        "use_case_layer": 1,
+        "testability": 1,
+        "abstraction_usage": 1
+      },
+      "total_score": 4,
+      "compliance_level": "none",
+      "justifications": {
+        "layer_separation": "Module directories separate modules from each other, but within a module the CRMEntity subclass handles persistence, business logic, and often view rendering together.",
+        "dependency_rule": "CRMEntity base class accesses the database directly; all module classes depend on it. No inversion of this dependency exists.",
+        "entity_independence": "Every domain class extends CRMEntity which contains PDO database calls. Entities cannot be instantiated without a live database connection.",
+        "use_case_layer": "Handler classes add some event-based workflow logic, providing a rudimentary separation for certain operations, but most business logic remains in CRMEntity subclasses.",
+        "testability": "A PHPUnit test suite exists but coverage is minimal; domain testing without a database is effectively impossible.",
+        "abstraction_usage": "The Vtlib library provides some utility abstractions, and the handler system adds a degree of indirection, but no formal port/adapter interfaces exist."
+      },
+      "overall_assessment": "Vtiger CRM inherits SugarCRM's legacy Active Record architecture and adds only superficial architectural improvements. It is another strong negative example, slightly better than SuiteCRM due to the handler system.",
+      "references": [
+        "https://github.com/vtiger-crm/vtiger/blob/master/vtlib/Vtiger/CRMEntity.php",
+        "https://github.com/vtiger-crm/vtiger/blob/master/modules/Contacts/Contacts.php"
+      ]
+    }
+  ]
+}
