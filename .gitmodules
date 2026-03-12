@@ -185,3 +185,15 @@ url = https://github.com/kanboard/kanboard
 [submodule "proyectos/board"]
 path = proyectos/board
 url = https://github.com/RestyaPlatform/board
+
+[submodule "proyectos/civicrm-core"]
+path = proyectos/civicrm-core
+url = https://github.com/civicrm/civicrm-core
+
+[submodule "proyectos/YetiForceCRM"]
+path = proyectos/YetiForceCRM
+url = https://github.com/YetiForceCompany/YetiForceCRM
+
+[submodule "proyectos/laravel-crm"]
+path = proyectos/laravel-crm
+url = https://github.com/krayin/laravel-crm
